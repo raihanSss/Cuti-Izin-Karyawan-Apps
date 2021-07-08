@@ -64,7 +64,7 @@ class PermohonanCutiController extends Controller
         $jumlahCuti = $sisaCuti - $durasi->days;
 
         if($jumlahCuti < 0){
-            return redirect()->route('karyawan.permohonan')->with(['error' => 'Maaf sisa cuti anda sudah habis']);
+            return redirect()->route('karyawan.permohonan')->with(['error' => 'Maaf anda tidak bisa mengajukan cuti karena sisa cuti anda sudah habis']);
         }else{
             
             DB::table('permohonan_cuti')->insert([

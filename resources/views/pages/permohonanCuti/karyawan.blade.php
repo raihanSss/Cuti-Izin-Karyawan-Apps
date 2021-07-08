@@ -3,13 +3,24 @@
 @section('content')
 <div class="main-content">
         <section class="section">
+            @if(Session::get('error'))
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-lg-12">
+                        <div class="alert alert-danger alert-has-icon alert-dismissible show fade">
+                            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                <span>×</span>
+                                </button>
+                                {{Session::get('error')}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
           <div class="row">
             <div class="col-12 col-sm-12 col-lg-12">
-            @if(Session::get('success'))
              <div id="flash-data" data-flashdata="{{ Session::get('success') }}"></div>
-            @elseif(Session::get('error'))
-             <div id="flash-data" data-flashdata="{{ Session::get('error') }}"></div>
-            @endif
               <div class="card">
                 <div class="card-header">
                   <h4>Data Permohonan Cuti</h4>
