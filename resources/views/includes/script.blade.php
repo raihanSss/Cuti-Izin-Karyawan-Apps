@@ -9,7 +9,6 @@
   <script src="{{asset('js/scripts.js')}}"></script>
   
   <!-- myscript -->
-  <script src="{{asset('js/myscripts.js')}}"></script>
   <!-- Custom JS File -->
   <script src="{{asset('js/custom.js')}}"></script>
   <script src="{{asset('bundles/cleave-js/dist/cleave.min.js')}}"></script>
@@ -31,14 +30,16 @@
   $(document).ready(function() {
     const flashData = $("#flash-data").data('flashdata');
     console.log('flash-data',flashData);
-    if(flashData === "Maaf sisa cuti anda sudah habis"){
+    // if(flashData === "Maaf sisa cuti anda sudah habis"){
         
-        iziToast.error({
-            title: 'Error!',
-            message: flashData,
-            position: 'topRight'
-        });
-    }elseif(flashData){
+    //     iziToast.error({
+    //         title: 'Error!',
+    //         message: flashData,
+    //         position: 'topRight'
+    //     });
+
+    // }
+    if(flashData){
         iziToast.success({
             title: 'Success !!',
             message: flashData,
