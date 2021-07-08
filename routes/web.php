@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +14,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Admin
+Route::get('admin/dashboard',[DashboardController::class, 'index'])->name('admin.dashboard');
+Route::get('karyawan/dashboard',[DashboardController::class, 'show'])->name('karyawan.dashboard');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AuthController::class, 'showFormLogin'])->name('login');
+Route::get('login', [AuthController::class, 'showFormLogin'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+ 
