@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Hash;
-use Session;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
@@ -51,7 +52,17 @@ class AuthController extends Controller
         Auth::attempt($data);
 
         if (Auth::check()) { // true sekalian session field di users nanti bisa dipanggil via Auth
-            
+            $users_login = DB::table('users')
+                ->join('karyawan','users.id','=','karyawan.user_id')
+                ->select('users.*','karyawan.NIK', 'karyawan.divisi')
+                ->where('users.name', Auth::user()->name)
+                ->get();
+            // dd($users_login);
+            Session::put('user_login', $users_login);
+            $sess = Session::get('user_login');
+
+            // dd($sess);
+
             //Login Success
             if(Auth::user()->role === 'karyawan'){
                 return redirect()->route('karyawan.dashboard');

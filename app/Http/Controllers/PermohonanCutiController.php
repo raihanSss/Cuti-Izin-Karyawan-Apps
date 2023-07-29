@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Permohonan_Cuti;
 use App\Models\Karyawan;
-use DB;
-use Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use DateTime;
 
 
@@ -22,10 +22,22 @@ class PermohonanCutiController extends Controller
     {
         $permohonan = DB::table('users')
             ->join('permohonan_cuti','users.id','=','permohonan_cuti.user_id')
-            ->select('permohonan_cuti.id','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
+            ->select('permohonan_cuti.id','permohonan_cuti.NIK','permohonan_cuti.divisi','permohonan_cuti.jenis_cuti','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
             ->where('permohonan_cuti.status','pending')
             ->get();
         return view('pages.permohonanCuti.index',['permohonan' => $permohonan]);
+        
+    }
+
+    public function cetakpermohonan()
+    {
+        $cetakpermohonan = DB::table('users')
+            ->join('permohonan_cuti','users.id','=','permohonan_cuti.user_id')
+            ->join('karyawan','users.id','=','karyawan.user_id')
+            ->select('karyawan.jumlah_cuti','permohonan_cuti.id','permohonan_cuti.NIK','permohonan_cuti.divisi','permohonan_cuti.jenis_cuti','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
+             ->where('permohonan_cuti.status','disetujui')
+            ->get();
+        return view('pages.permohonanCuti.cetakpermohonan',['permohonan' => $cetakpermohonan]);
         
     }
 
@@ -69,6 +81,9 @@ class PermohonanCutiController extends Controller
             
             DB::table('permohonan_cuti')->insert([
                 'user_id' => Auth::id(),
+                'NIK' => $request->NIK,
+                'divisi' => $request->divisi,
+                'jenis_cuti' => $request->jenis_cuti,
                 'alasan_cuti' => $request->alasan_cuti,
                 'tgl_mulai' => $request->tgl_mulai,
                 'tgl_akhir' => $request->tgl_akhir,
@@ -95,7 +110,7 @@ class PermohonanCutiController extends Controller
         $id=Auth::user()->id;
         $permohonan = DB::table('users')
             ->join('permohonan_cuti','users.id','=','permohonan_cuti.user_id')
-            ->select('permohonan_cuti.id','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
+            ->select('permohonan_cuti.id','permohonan_cuti.NIK','permohonan_cuti.divisi','permohonan_cuti.jenis_cuti','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
             ->where('permohonan_cuti.status','pending')
             ->where('permohonan_cuti.user_id',$id)
             ->get();
@@ -126,15 +141,18 @@ class PermohonanCutiController extends Controller
         $data = DB::table('users')
         ->join('karyawan','users.id','=','karyawan.user_id')
         ->join('permohonan_cuti','users.id','=','permohonan_cuti.user_id')
-        ->select('permohonan_cuti.id','permohonan_cuti.user_id','users.name',
+        ->select('permohonan_cuti.id','permohonan_cuti.user_id','permohonan_cuti.NIK','permohonan_cuti.divisi','permohonan_cuti.jenis_cuti','users.name',
                   'permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai',
                   'permohonan_cuti.tgl_akhir','permohonan_cuti.status',
-                  'karyawan.id','karyawan.alamat','karyawan.no_telpon',
+                  'karyawan.id','karyawan.NIK','karyawan.divisi','karyawan.alamat','karyawan.no_telpon',
                   'karyawan.jumlah_cuti'
                 )
         ->where('permohonan_cuti.id',$id)
         ->get();
         $user_id='';
+        $NIK='';
+        $divisi='';
+        $jenis_cuti='';
         $alasan_cuti='';
         $tgl_mulai='';
         $tgl_akhir='';
@@ -145,6 +163,9 @@ class PermohonanCutiController extends Controller
 
         foreach ($data as $key => $value) {
             $user_id = $value->user_id ;
+            $NIK = $value->NIK;
+            $divisi = $value->divisi;
+            $jenis_cuti = $value->jenis_cuti;
             $alasan_cuti = $value->alasan_cuti ;
             $tgl_mulai = $value->tgl_mulai;
             $tgl_akhir = $value->tgl_akhir;
@@ -153,21 +174,57 @@ class PermohonanCutiController extends Controller
             $no_telpon = $value->no_telpon;
             $jumlah_cuti = $value->jumlah_cuti;
         }
-        $tglMulai = date_create($tgl_mulai);
-        $tglAkhir = date_create($tgl_akhir);
-        $durasi = date_diff($tglMulai,$tglAkhir);
-        
-        $jmlCuti=$jumlah_cuti - $durasi->days;
 
-        DB::table('karyawan')->where('user_id',$user_id)->update([
-            'user_id' => $user_id,
-            'alamat' => $alamat,
-            'no_telpon' => $no_telpon,
-            'jumlah_cuti' => $jmlCuti,
-        ]);
+        // dd($jenis_cuti);
+
+        if($jenis_cuti == 'Cuti tahunan'){
+            $tglMulai = date_create($tgl_mulai);
+            $tglAkhir = date_create($tgl_akhir);
+            $durasi = date_diff($tglMulai,$tglAkhir);
         
+             $jmlCuti=$jumlah_cuti - $durasi->days;
+             $dataUpdate = [
+                'user_id' => $user_id,
+                'NIK' => $NIK,
+                'divisi' => $divisi,
+                'alamat' => $alamat,
+                'no_telpon' => $no_telpon,
+                'jumlah_cuti' => $jmlCuti,
+             ];
+
+            //  dd($dataUpdate);
+             
+             DB::table('karyawan')->where('user_id',$user_id)->update([
+                'user_id' => $user_id,
+                'NIK' => $NIK,
+                'divisi' => $divisi,
+                'alamat' => $alamat,
+                'no_telpon' => $no_telpon,
+                'jumlah_cuti' => $jmlCuti,
+            ]);
+
+        }else{
+            
+            DB::table('karyawan')->where('user_id',$user_id)->update([
+                'user_id' => $user_id,
+                'NIK' => $NIK,
+                'divisi' => $divisi,
+                'alamat' => $alamat,
+                'no_telpon' => $no_telpon,
+            ]);
+          }
+          
+        // $tglMulai = date_create($tgl_mulai);
+        // $tglAkhir = date_create($tgl_akhir);
+        // $durasi = date_diff($tglMulai,$tglAkhir);
+        
+        // $jmlCuti=$jumlah_cuti - $durasi->days;
+    
         DB::table('permohonan_cuti')->where('id',$id)->update([
             'user_id' => $user_id,
+            'NIK' => $NIK,
+            'divisi' => $divisi,
+            'jenis_cuti' => $jenis_cuti,
             'alasan_cuti' => $alasan_cuti,
             'tgl_mulai' => $tgl_mulai,
             'tgl_akhir' => $tgl_akhir,
@@ -181,20 +238,26 @@ class PermohonanCutiController extends Controller
     {
         $data = DB::table('users')
         ->join('permohonan_cuti','users.id','=','permohonan_cuti.user_id')
-        ->select('permohonan_cuti.id','permohonan_cuti.user_id','users.name',
+        ->select('permohonan_cuti.id','permohonan_cuti.user_id','permohonan_cuti.NIK','permohonan_cuti.divisi','permohonan_cuti.jenis_cuti','users.name',
                   'permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai',
                   'permohonan_cuti.tgl_akhir','permohonan_cuti.status'
                 )
         ->where('permohonan_cuti.id',$id)
         ->get();
         $user_id='';
+        $NIK='';
+        $divisi='';
+        $jenis_cuti='';
         $alasan_cuti='';
         $tgl_mulai='';
         $tgl_akhir='';
         $status='';
 
         foreach ($data as $key => $value) {
-            $user_id = $value->user_id ;
+            $user_id = $value->user_id;
+            $NIK = $value->NIK ;
+            $divisi = $value->divisi ;
+            $jenis_cuti = $value->jenis_cuti;
             $alasan_cuti = $value->alasan_cuti ;
             $tgl_mulai = $value->tgl_mulai;
             $tgl_akhir = $value->tgl_akhir;
@@ -203,6 +266,9 @@ class PermohonanCutiController extends Controller
         
         DB::table('permohonan_cuti')->where('id',$id)->update([
             'user_id' => $user_id,
+            'NIK' => $NIK,
+            'divisi' => $divisi,
+            'jenis_cuti' => $jenis_cuti,
             'alasan_cuti' => $alasan_cuti,
             'tgl_mulai' => $tgl_mulai,
             'tgl_akhir' => $tgl_akhir,

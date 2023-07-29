@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class RiwayatPermohonanController extends Controller
 {
@@ -16,18 +16,25 @@ class RiwayatPermohonanController extends Controller
             $id = Auth::user()->id;
             $permohonan = DB::table('users')
             ->join('permohonan_cuti','users.id','=','permohonan_cuti.user_id')
-            ->select('permohonan_cuti.id','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
+            ->select('permohonan_cuti.id','permohonan_cuti.NIK','permohonan_cuti.divisi','permohonan_cuti.jenis_cuti','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
             ->where('permohonan_cuti.status','disetujui')
             ->where('users.id',$id)
             ->get();
         }else{
             $permohonan = DB::table('users')
                 ->join('permohonan_cuti','users.id','=','permohonan_cuti.user_id')
-                ->select('permohonan_cuti.id','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
+                ->select('permohonan_cuti.id','permohonan_cuti.NIK','permohonan_cuti.divisi','permohonan_cuti.jenis_cuti','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
                 ->where('permohonan_cuti.status','disetujui')
                 ->get();
         }
+        // public function exportdisetujuiAll()
+        // {
+        //     $permohonnan = disetujui::all();
+        //     $pdf = PDF::loadView('permohonanCuti.disetujuiAllPDF',compact('disetujui'));
+        //     return $pdf->download('disetujui.pdf');
+        // }
 
+        
         return view('pages.permohonanCuti.disetujui',['permohonan' => $permohonan]);
     }
     
@@ -37,7 +44,7 @@ class RiwayatPermohonanController extends Controller
             $id = Auth::user()->id;
             $permohonan = DB::table('users')
                 ->join('permohonan_cuti','users.id','=','permohonan_cuti.user_id')
-                ->select('permohonan_cuti.id','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
+                ->select('permohonan_cuti.id','permohonan_cuti.NIK','permohonan_cuti.divisi','permohonan_cuti.jenis_cuti','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
                 ->where('permohonan_cuti.status','ditolak')
                 ->where('users.id',$id)
 
@@ -45,7 +52,7 @@ class RiwayatPermohonanController extends Controller
         }else{
             $permohonan = DB::table('users')
                 ->join('permohonan_cuti','users.id','=','permohonan_cuti.user_id')
-                ->select('permohonan_cuti.id','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
+                ->select('permohonan_cuti.id','permohonan_cuti.NIK','permohonan_cuti.divisi','permohonan_cuti.jenis_cuti','users.name','permohonan_cuti.alasan_cuti','permohonan_cuti.tgl_mulai','permohonan_cuti.tgl_akhir','permohonan_cuti.status')
                 ->where('permohonan_cuti.status','ditolak')
                 ->get();
         }

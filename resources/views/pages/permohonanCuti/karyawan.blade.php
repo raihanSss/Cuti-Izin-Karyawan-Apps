@@ -23,24 +23,30 @@
              <div id="flash-data" data-flashdata="{{ Session::get('success') }}"></div>
               <div class="card">
                 <div class="card-header">
-                  <h4>Data Permohonan Cuti</h4>
+                  <h4>Data Permohonan</h4>
                 </div>
                 <div class="ml-4 mt-3">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Buat Permohonan Cuti</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Buat Permohonan Baru</button>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive table-invoice">
                     <table class="table table-striped" id="table-1">
                       <tr>
                         <th class="text-center">No</th>
-                        <th>Alasan Cuti</th>
-                        <th>Mulai Cuti</th>
-                        <th>Berakhir Cuti</th>
+                        <th>Nik</th>
+                        <th>Divisi</th>
+                        <th>Jenis Permohonan </th>
+                        <th>Alasan</th>
+                        <th>Mulai</th>
+                        <th>Berakhir</th>
                         <th>Status</th>
                       </tr>
                     @foreach($permohonan as $i => $p)
                       <tr>
                         <td class="p-0 text-center">{{$i+1}}</td>
+                        <td class="align-middle">{{$p->NIK}}</td>
+                        <td class="text-truncate">{{$p->divisi}}</td>
+                        <td class="text-truncate">{{$p->jenis_cuti}}</td>
                         <td class="text-truncate">{{$p->alasan_cuti}}</td>
                         <td class="align-middle">{{$p->tgl_mulai}}</td>
                         <td class="align-middle">{{$p->tgl_akhir}}</td>
@@ -60,7 +66,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="formModal">Form Tambah Data Karyawan</h5>
+                <h5 class="modal-title" id="formModal">Form Tambah Permohonan</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -68,16 +74,36 @@
               <div class="modal-body">
                 <form class="" action="{{ route('permohonan.insert')}}" method="post" >
                 @csrf
+                <div class="form-group">
+                  <label for="divisi">Nik</label>
+                  <input type="text" class="form-control" name="NIK" required value="{{ Session::get('user_login')[0]->NIK }}" readonly>
+                </div>
                   <div class="form-group">
-                    <label>Alasan Cuti</label>
-                    <textarea class="form-control" name="alasan_cuti" required ></textarea>
+                    <label for="divisi">Divisi</label>
+                    <input type="text" class="form-control" name="divisi" required value="{{ Session::get('user_login')[0]->divisi }}" readonly>
                   </div>
                   <div class="form-group">
-                    <label>tanggal Mulai Cuti</label>
+                    <label for="alasan_cuti">Alasan</label>
+                    <input type="text" class="form-control" name="alasan_cuti" required >
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="jenis_cuti">Jenis Permohonan</label>
+                    <select id="jenis_cuti" class="form-control" name='jenis_cuti' required>
+                      <option selected>-pilih-</option>
+                      <option>Cuti tahunan</option>
+                      <option>Cuti melahirkan</option>
+                      <option>Cuti sakit</option>
+                      <option>Cuti besar</option>
+                      <option>Cuti alasan penting</option>
+                      <option>Izin</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>tanggal Mulai</label>
                     <input type="text" name="tgl_mulai" required class="form-control datepicker">
                   </div>
                   <div class="form-group">
-                    <label>tanggal Berahir Cuti</label>
+                    <label>tanggal Berakhir</label>
                     <input type="text" name="tgl_akhir" required class="form-control datepicker">
                   </div> 
                   <button type="submit" class="btn btn-primary m-t-15 waves-effect">Submit</button>

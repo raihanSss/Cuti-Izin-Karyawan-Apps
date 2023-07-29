@@ -12,6 +12,9 @@ class Permohonan_Cuti extends Model
 
     protected $fillable = [
         'user_id',
+        'NIK',
+        'divisi',
+        'jenis_cuti',
         'alasan_cuti',
         'tgl_mulai',
         'tgl_akhir'

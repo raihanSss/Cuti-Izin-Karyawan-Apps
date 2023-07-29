@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Karyawan;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 class KaryawanController extends Controller
@@ -16,9 +17,9 @@ class KaryawanController extends Controller
      */
     public function index()
     {
-        $karyawan = DB::table('users')
+        $karyawan = DB::table('users') 
         ->join('karyawan','users.id','=','karyawan.user_id')
-        ->select('users.name','karyawan.id','karyawan.alamat','karyawan.no_telpon','karyawan.jumlah_cuti')
+        ->select('users.name','karyawan.id','karyawan.NIK','karyawan.divisi','karyawan.alamat','karyawan.no_telpon','karyawan.jumlah_cuti')
         ->get();
         
         return view('pages.Karyawan.index',['karyawan' =>$karyawan]);
@@ -29,10 +30,21 @@ class KaryawanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
+
     {
-        //
+        $karyawan = DB::table('users')
+        ->join('karyawan','users.id','=','karyawan.user_id')
+        ->select('users.name','karyawan.id','karyawan.NIK','karyawan.divisi','karyawan.alamat','karyawan.no_telpon','karyawan.jumlah_cuti')
+        ->where('karyawan.id',$id)
+        ->get();
+       
+        return view('pages.karyawan.FormTambah',['karyawan' => $karyawan]);
     }
+
+
+
+//     }
 
     /**
      * Store a newly created resource in storage.
@@ -41,9 +53,24 @@ class KaryawanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    { 
+        dd($request->post);
+        $validatedData = $request->validate([
+            'nama' => 'required|max:255',
+            'NIK' => 'required',
+            'divisi' => 'required',
+            'alamat' => 'nullable',
+            'no_telpon' => 'nullable|max:255',
+            'jatah_cuti' => 'nullable',
+        ]);
+
+        $validatedData['user_id'] = auth()->user()->id;
+        
+
+        Karyawan::create($validatedData);
+        return redirect('views/karyawan')->with('sukses', 'Data karyawan berhasil ditambah');
     }
+    
 
     /**
      * Display the specified resource.
@@ -66,7 +93,7 @@ class KaryawanController extends Controller
     {
         $karyawan = DB::table('users')
         ->join('karyawan','users.id','=','karyawan.user_id')
-        ->select('users.name','karyawan.id','karyawan.alamat','karyawan.no_telpon','karyawan.jumlah_cuti')
+        ->select('users.name','karyawan.id','karyawan.NIK','karyawan.divisi','karyawan.alamat','karyawan.no_telpon','karyawan.jumlah_cuti')
         ->where('karyawan.id',$id)
         ->get();
        
@@ -90,6 +117,8 @@ class KaryawanController extends Controller
             ->where('id',$request->id)
             ->update([
             'user_id' => $request->id,
+            'NIK' =>$request ->NIK,
+            'divisi' => $request->divisi,
             'alamat' => $request->alamat,
             'no_telpon' => $request->no_telpon,
             'jumlah_cuti' => $request->jumlah_cuti
@@ -104,8 +133,9 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(karyawan $karyawan)
     {
-        //
+        karyawan::destroy($karyawan->id);
+        return redirect('/views/karyawan')->with('Data karyawan Telah Dihapus');
     }
 }

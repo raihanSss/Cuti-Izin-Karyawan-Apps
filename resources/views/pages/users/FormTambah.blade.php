@@ -6,41 +6,37 @@
           <div class="section-body">
             <div class="row">
               <div class="col-12 col-md-12 col-lg-12">
-                <Form method="POST" action="{{route('karyawan.update')}}">
+                <Form method="POST" action="{{route('users.insert')}}">
                 @csrf
-                @foreach ($karyawan as $k)
+                @foreach ($users as $u)
                     <div class="card">
                     <div class="card-header">
-                        <h4>Form Edit Karyawan</h4>
+                        <h4>Form Tambah User</h4>
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                        <label>Nama Lengkap</label>
-                        <input type="hidden" class="form-control" name="id" value="{{$k->id}}">
-                        <input type="text" class="form-control" name="name" value="{{$k->name}}">
+                        <label>username</label>
+                        <input type="hidden" class="form-control" name="id">
+                        <input type="text" class="form-control" name="name">
                         </div>
-                        <div class="form-group">
-                          <label>Nik</label>
-                          <input type="text" class="form-control" name="NIK" value="{{$k->NIK}}">
+                        <div class="card-body">
+                          <div class="form-group">
+                          <label>email</label>
+                          <input type="hidden" class="form-control" name="id">
+                          <input type="text" class="form-control" name="email">
                           </div>
-                        <div class="form-group">
-                          <label>Divisi</label>
-                          <input type="text" class="form-control" name="divisi" value="{{$k->divisi}}">
-                          </div>
-                        <div class="form-group">
-                        <label>Alamat</label>
-                        <input type="text" class="form-control" name="alamat" value="{{$k->alamat}}">
-                        </div>
-                        <div class="form-group">
-                        <label>No Telpon</label>
-                        <input type="text" class="form-control" name="no_telpon" value="{{$k->no_telpon}}">
-                        </div>
-                        
-                        <div class="form-group">
-                        <label>Jumlah Cuti</label>
-                        <input type="text" class="form-control" name="jumlah_cuti" value="{{$k->jumlah_cuti}}">
-                        </div>
-                    </div>
+                          <div class="card-body">
+                            <div class="form-group">
+                            <label>password</label>
+                            <input type="hidden" class="form-control" name="id">
+                            <input type="password" class="form-control" name="password">
+                            </div>
+                           <div class="card-body">
+                            <div class="form-group">
+                            <label>role</label>
+                            <input type="hidden" class="form-control" name="id">
+                            <input type="text" class="form-control" name="role">
+                            </div>
                     <div class="card-footer text-right">
                         <button class="btn btn-primary mr-1" type="submit">Submit</button>
                     </div>

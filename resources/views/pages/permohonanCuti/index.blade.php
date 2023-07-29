@@ -8,17 +8,20 @@
             <div id="flash-data" data-flashdata="{{ Session::get('success') }}"></div>
             <div class="card">
             <div class="card-header">
-                <h4>Data Permohonan Cuti</h4>
+                <h4>Data Permohonan</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive table-invoice">
                 <table class="table table-striped" id="table-1">
                     <tr>
                         <th class="text-center">No</th>
-                        <th>nama karyawan</th>
-                        <th>Alasan Cuti</th>
-                        <th>Mulai Cuti</th>
-                        <th>Berakhir Cuti</th>
+                        <th>Nama karyawan</th>
+                        <th>NIK</th>
+                        <th>Divisi</th>
+                        <th>Jenis Permohonan </th>
+                        <th>Alasan</th>
+                        <th>Mulai</th>
+                        <th>Berakhir</th>
                         <th>Status</th>
                         <th>Opsi</th>
                     </tr>
@@ -26,6 +29,9 @@
                     <tr>
                         <td class="p-0 text-center">{{$i+1}}</td>
                         <td class="font-weight-600">{{$p->name}}</td>
+                        <td class="align-middle">{{$p->NIK}}</td>
+                        <td class="text-truncate">{{$p->divisi}}</td>
+                        <td class="text-truncate">{{$p->jenis_cuti}}</td>
                         <td class="text-truncate">{{$p->alasan_cuti}}</td>
                         <td class="align-middle">{{$p->tgl_mulai}}</td>
                         <td class="align-middle">{{$p->tgl_akhir}}</td>

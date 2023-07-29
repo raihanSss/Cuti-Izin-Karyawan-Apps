@@ -5,7 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Karyawan;
-use Hash;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserSeeder extends Seeder
 {
@@ -78,7 +79,15 @@ class UserSeeder extends Seeder
             'name' => 'Galih Purna',
             'email' => 'galih@example.com',
             'password' => Hash::make("galih123"),
-            'role' => 'Super Admin',
+            'role' => 'Staf HR',
+        ]);
+
+        //Manager
+        $user = User::create([
+            'name' => 'Udin',
+            'email' => 'udin@example.com',
+            'password' => Hash::make("udin123"),
+            'role' => 'Manager',
         ]);
         
         // staf Hr

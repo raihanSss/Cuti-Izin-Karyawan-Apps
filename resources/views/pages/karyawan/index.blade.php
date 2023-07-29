@@ -13,9 +13,20 @@
             <div class="card-body">
                 <div class="table-responsive table-invoice">
                 <table class="table table-striped" id="table-1">
+                    
+             {{-- <a class="btn btn-action bg-blue mr-1" href="{{route('karyawan.tambah',['id' => $k->id])}}" >Tambah Data Karyawan</a> 
+                     --}}
+                        {{-- <a class="btn btn-action bg-blue mr-1" href="" >Tambah Data Karyawan</a>  --}}
+                    
+                        <div class="ml-4 mt-3">
+                            <button class="btn btn-action bg-blue" data-toggle="modal" data-target="#exampleModal">Tambah Data Karyawan</button>
+                        </div>
+
                     <tr>
                         <th class="text-center">No</th>
-                        <th>nama Lengkap</th>
+                        <th>Nama Lengkap</th>
+                        <th>NIK</th>
+                        <th>Divisi</th>
                         <th>Alamat</th>
                         <th>No Telpon</th>
                         <th>Jumlah Cuti</th>
@@ -25,11 +36,16 @@
                         <tr>
                             <td class="p-0 text-center">{{$i+1}}</td>
                             <td class="font-weight-600">{{$k->name}}</td>
+                            <td class="font-weight-600">{{$k->NIK}}</td> 
+                            <td class="font-weight-600">{{$k->divisi}}</td>
                             <td class="text-truncate">{{$k->alamat}}</td>
                             <td class="align-middle">{{$k->no_telpon}}</td>
                             <td class="align-middle">{{$k->jumlah_cuti}} Hari</td>
                             <td> 
                                 <a class="btn btn-action bg-purple mr-1" href="{{route('karyawan.edit',['id' => $k->id])}}" >Edit</a> 
+                            </td>
+                            <td> 
+                                <a class="btn btn-action bg-red mr-1" href="#" >Hapus</a> 
                             </td>
                         </tr>
                     @endforeach
@@ -52,25 +68,47 @@
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
+            {{-- @if(session()->has('sukses'))
+                                    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                                      <i class="bi bi-check-lg"></i> {{ session('sukses') }}
+                                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    @endif
+                                    @if(session()->has('hapus'))
+                                    <div class="alert alert-warning alert-dismissible fade show mt-3" role="alert">
+                                      <i class="bi bi-check-lg"></i> {{ session('hapus') }}
+                                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    @endif --}}
             <div class="modal-body">
-            <form class="">
+            {{-- <form class="" action="{{ route('karyawan.insert') }}" method="post" > --}}
+                
+                    @csrf
                 <div class="form-group">
                 <label>Nama Lengkap</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-envelope"></i>
+                   <div class="input-group-text"> 
                     </div>
                     </div>
                     <input type="text" class="form-control" name="nama">
                 </div>
                 </div>
                 <div class="form-group">
+                    <label>NIK</label>
+                    <div class="input-group">
+                       <div class="input-group-prepend"> 
+                        <div class="input-group-text"> 
+                        </div>
+                        </div>
+                        <input type="text" class="form-control" name="nik">
+                    </div>
+                    </div>
+                <div class="form-group">
                 <label>Alamat</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-envelope"></i>
+                     <div class="input-group-text"> 
                     </div>
                     </div>
                     <input type="text" class="form-control"  name="alamat">
@@ -80,8 +118,7 @@
                 <label>No Telpon</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
-                    <div class="input-group-text">
-                        <i class="fas fa-envelope"></i>
+                   <div class="input-group-text"> 
                     </div>
                     </div>
                     <input type="text" class="form-control"  name="no_telpon">
@@ -92,18 +129,17 @@
                 <div class="input-group">
                     <div class="input-group-prepend">
                     <div class="input-group-text">
-                        <i class="fas fa-envelope"></i>
+
                     </div>
                     </div>
                     <input type="text" class="form-control"  name="jumlah_cuti">
                 </div>
-                </div>
-                
-                
-                
-                <button type="button" class="btn btn-primary m-t-15 waves-effect">LOGIN</button>
+                </div
             </form>
+            
+            <button type="button" class="btn btn-primary m-t-15 waves-effect">submit</button>
             </div>
+          
         </div>
         </div>
     </div>

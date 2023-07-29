@@ -6,12 +6,12 @@
           <div class="section-body">
             <div class="row">
               <div class="col-12 col-md-12 col-lg-12">
-                <Form method="POST" action="{{route('karyawan.update')}}">
+                <Form method="POST" action="{{route('karyawan.insert')}}">
                 @csrf
                 @foreach ($karyawan as $k)
                     <div class="card">
                     <div class="card-header">
-                        <h4>Form Edit Karyawan</h4>
+                        <h4>Form Tambah Karyawan</h4>
                     </div>
                     <div class="card-body">
                         <div class="form-group">

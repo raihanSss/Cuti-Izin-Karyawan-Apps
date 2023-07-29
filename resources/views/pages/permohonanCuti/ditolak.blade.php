@@ -15,7 +15,10 @@
                 <table class="table table-striped" id="table-1">
                     <tr>
                         <th class="text-center">No</th>
-                        <th>nama karyawan</th>
+                        <th>Nama karyawan</th>
+                        <th>Nik</th>
+                        <th>Divisi</th>
+                        <th>Jenis Cuti</th>
                         <th>Alasan Cuti</th>
                         <th>Mulai Cuti</th>
                         <th>Berakhir Cuti</th>
@@ -25,6 +28,9 @@
                     <tr>
                         <td class="p-0 text-center">{{$i+1}}</td>
                         <td class="font-weight-600">{{$p->name}}</td>
+                        <td class="align-middle">{{$p->NIK}}</td>
+                        <td class="text-truncate">{{$p->divisi}}</td>
+                        <td class="text-truncate">{{$p->jenis_cuti}}</td>
                         <td class="text-truncate">{{$p->alasan_cuti}}</td>
                         <td class="align-middle">{{$p->tgl_mulai}}</td>
                         <td class="align-middle">{{$p->tgl_akhir}}</td>

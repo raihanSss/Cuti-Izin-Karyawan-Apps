@@ -11,20 +11,28 @@
                 <h4>Riwayat Permohonan Cuti Disetujui</h4>
             </div>
             <div class="card-body">
+                @if(Auth::user()->role === "karyawan")
                 <div class="table-responsive table-invoice">
-                <table class="table table-striped" id="table-1">
+                <table class="table table-striped" id="table-1"> 
                     <tr>
                         <th class="text-center">No</th>
-                        <th>nama karyawan</th>
-                        <th>Alasan Cuti</th>
-                        <th>Mulai Cuti</th>
-                        <th>Berakhir Cuti</th>
+                        <th>Nama karyawan</th>
+                        <th>Nik</th>
+                        <th>Divisi</th>
+                        <th>Jenis Permohonan</th>
+                        <th>Alasan</th>
+                        <th>Mulai</th>
+                        <th>Berakhir</th>
                         <th>Status</th>
                     </tr>
                     @foreach($permohonan as $i => $p)
                     <tr>
                         <td class="p-0 text-center">{{$i+1}}</td>
                         <td class="font-weight-600">{{$p->name}}</td>
+                        {{-- <td class="text">{{$p->NIK}}</td> --}}
+                        <td class="text-truncate">{{$p->NIK}}</td> 
+                        <td class="text-truncate">{{$p->divisi}}</td> 
+                        <td class="text-truncate">{{$p->jenis_cuti}}</td>
                         <td class="text-truncate">{{$p->alasan_cuti}}</td>
                         <td class="align-middle">{{$p->tgl_mulai}}</td>
                         <td class="align-middle">{{$p->tgl_akhir}}</td>
@@ -32,7 +40,42 @@
                     </tr>
                     @endforeach
                 </table>
+                @else
+                    <div class="table-responsive table-invoice">
+                    <table class="table table-striped" id="table-1"> 
+                        {{-- <a class="btn btn-action bg-blue mr-1" href="#" >Buat laporan</a>  --}}
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th>Nama karyawan</th>
+                            <th>Nik</th>
+                            <th>Divisi</th>
+                            <th>Jenis Permohonan</th>
+                            <th>Alasan</th>
+                            <th>Mulai</th>
+                            <th>Berakhir</th>
+                            <th>Status</th>
+                        </tr>
+                        @foreach($permohonan as $i => $p)
+                        <tr>
+                            <td class="p-0 text-center">{{$i+1}}</td>
+                            <td class="font-weight-600">{{$p->name}}</td>
+                             <td class="text-truncate">{{$p->NIK}}</td>
+                             <td class="text-truncate">{{$p->divisi}}</td> 
+                            <td class="text-truncate">{{$p->jenis_cuti}}</td>
+                            <td class="text-truncate">{{$p->alasan_cuti}}</td>
+                            <td class="align-middle">{{$p->tgl_mulai}}</td>
+                            <td class="align-middle">{{$p->tgl_akhir}}</td>
+                            <td class="align-middle"><span class="badge badge-success">{{$p->status}}</span></td>
+                        </tr>
+                       
+                        @endforeach
+                    </table>
+                    <div class="box-header">
+                      
+                        <a class="btn btn-action bg-red mr-1" href="{{route('permohonan.cetak',['id' => $p->id])}}" >Cetak Permohonan</a> 
+                    </div>
                 </div>
+                @endif
             </div>
             </div>
         </div>
