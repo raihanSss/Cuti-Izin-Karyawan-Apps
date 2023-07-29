@@ -5,7 +5,7 @@
 
 ```
 # clone the repo
-$ git clone https://github.com/Fahrul23/cuti_karyawan_app.git
+$ git clone https://github.com/raihanSss/Programs.git
 
 # go into app's directory
 $ cd cuti_karyawan_app
